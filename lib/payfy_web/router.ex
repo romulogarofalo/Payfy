@@ -5,8 +5,26 @@ defmodule PayfyWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug PayfyWeb.Auth.Pipeline
+  end
+
+  pipeline :ensure_authed_access do
+    plug Guardian.Plug.EnsureAuthenticated, handler: PayfyWeb.HttpAuthErrorHandler
+  end
+
   scope "/api", PayfyWeb do
     pipe_through :api
+
+    post "/create", UserController, :create
+  end
+
+  scope "/api", PayfyWeb do
+    pipe_through [:api, :auth, :ensure_authed_access]
+
+    post "/raffle", RaffleController, :create
+    get "/raffle", RaffleController, :get
+    post "/join/raffle", RaffleController, :join
   end
 
   # Enables LiveDashboard only for development
