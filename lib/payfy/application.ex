@@ -15,9 +15,10 @@ defmodule Payfy.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Payfy.PubSub},
       # Start the Endpoint (http/https)
-      PayfyWeb.Endpoint
+      PayfyWeb.Endpoint,
       # Start a worker by calling: Payfy.Worker.start_link(arg)
       # {Payfy.Worker, arg}
+      {Oban, Application.fetch_env!(:payfy, Oban)}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
