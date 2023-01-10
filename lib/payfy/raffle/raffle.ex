@@ -8,6 +8,7 @@ defmodule Payfy.Raffle do
   schema "raffles" do
     field :name, :string
     field :limit_date, :date
+    field :id_join_raffle, :binary
 
     many_to_many :users,
                  User,
@@ -21,14 +22,21 @@ defmodule Payfy.Raffle do
   def create_changeset(attrs) do
     %__MODULE__{}
     |> cast(attrs, @castable_fields)
+    |> validate_change(:limit_date, &validate_date/2)
     |> validate_required(@required_attrs)
   end
+
+  def add_id_join_raffle(changeset, uuid), do: cast(changeset, %{id_join_raffle: uuid}, [:id_join_raffle])
 
   def join_ruffle(user_id, changeset) do
     cast(changeset, %{user_id: user_id}, [:user_id])
   end
 
-  def define_winner() do
-
+  def validate_date(_, date) do
+    if Date.diff(date, Date.utc_today()) > 0 do
+      []
+    else
+      [limit_date: "should be after today"]
+    end
   end
 end
