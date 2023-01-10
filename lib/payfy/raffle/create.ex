@@ -8,11 +8,16 @@ defmodule Payfy.Raffle.Create do
     |> create_job_raffle()
   end
 
-  def create_job_raffle(%Ecto.Changeset{errors: [_|_]} = changeset), do: {:error, changeset}
-  def create_job_raffle(changeset) do
-    Payfy.Jobs.CreateRaffle.new(%{"changeset_raffle" => changeset})
-    |> Oban.insert!()
+  def create_job_raffle(%Ecto.Changeset{errors: [_ | _]} = changeset), do: {:error, changeset}
 
-    {:ok, Ecto.UUID.generate()}
+  def create_job_raffle(changeset) do
+    id_join_raffle = Ecto.UUID.generate()
+
+    changeset.changes
+    |> Map.put(:id_join_raffle, id_join_raffle)
+    |> Payfy.Jobs.CreateRaffle.new()
+    |> Oban.insert()
+
+    {:ok, id_join_raffle}
   end
 end

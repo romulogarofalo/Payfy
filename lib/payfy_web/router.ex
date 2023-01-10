@@ -17,10 +17,6 @@ defmodule PayfyWeb.Router do
     pipe_through :api
 
     post "/create", UserController, :create
-  end
-
-  scope "/api", PayfyWeb do
-    pipe_through [:api, :auth, :ensure_authed_access]
 
     post "/raffle", RaffleController, :create
     get "/raffle", RaffleController, :get

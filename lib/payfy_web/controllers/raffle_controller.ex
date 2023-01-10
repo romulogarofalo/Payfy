@@ -11,8 +11,11 @@ defmodule PayfyWeb.RaffleController do
     params
     |> Create.run()
     |> case do
-      {:ok, ruffle_id} -> send_resp(conn, 200, "{\"ruffle_id\": \"#{ruffle_id}\"}")
-      {:error, changeset_error} -> send_resp(conn, 400, "{\"message\":\"input error\"}")
+      {:ok, ruffle_id} ->
+        send_resp(conn, 200, "{\"ruffle_id\": \"#{ruffle_id}\"}")
+
+      {:error, changeset_error} ->
+        send_resp(conn, 400, "{\"message\":\"input error\"}")
     end
   end
 
@@ -21,8 +24,6 @@ defmodule PayfyWeb.RaffleController do
     # check if user exists
     JoinRaffle.new(params)
     |> Oban.insert!()
-
-
   end
 
   def get(conn, params) do
