@@ -5,7 +5,8 @@ defmodule Payfy.User do
   schema "users" do
     field :name, :string
     field :email, :string
-    timestamps()
+
+    many_to_many :raffle, Payfy.Raffle, join_through: "user_raffle"
   end
 
   @required_attrs [:name, :email]
@@ -19,9 +20,9 @@ defmodule Payfy.User do
     |> unique_constraint([:email])
   end
 
-  def changeset_update_raffle(%__MODULE__{} = user, raffle) do
-    user
-    |> cast(%{}, [:user_id, :raffle_id])
-    |> put_assoc(:raffles, raffle)
-  end
+  # def changeset_update_raffle(%__MODULE__{} = user, raffle) do
+  #   user
+  #   |> cast(%{}, [:user_id, :raffle_id])
+  #   |> put_assoc(:raffles, raffle)
+  # end
 end

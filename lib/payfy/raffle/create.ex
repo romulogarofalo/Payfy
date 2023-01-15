@@ -14,9 +14,9 @@ defmodule Payfy.Raffle.Create do
     id_join_raffle = Ecto.UUID.generate()
 
     changeset.changes
-    |> Map.put(:id_join_raffle, id_join_raffle)
+    |> Map.put(:id, id_join_raffle)
     |> Payfy.Jobs.CreateRaffle.new()
-    |> Oban.insert()
+    |> Oban.insert!()
 
     {:ok, id_join_raffle}
   end

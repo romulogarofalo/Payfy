@@ -6,11 +6,10 @@ defmodule Payfy.Jobs.CreateRaffle do
         args: %{
           "name" => name,
           "limit_date" => limit_date,
-          "id_join_raffle" => id_join_raffle
+          "id" => id
         }
-      }) do
-    Payfy.Raffle.create_changeset(%{name: name, limit_date: limit_date})
-    |> Payfy.Raffle.add_id_join_raffle(id_join_raffle)
+        }) do
+    Payfy.Raffle.create_changeset(%{name: name, limit_date: limit_date, id: id})
     |> Payfy.Repo.insert() # passar esse insert para arquivo responsavel pela insercao?
   end
 end

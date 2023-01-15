@@ -6,19 +6,10 @@ defmodule PayfyWeb.UserController do
 
   def create(conn, params) do
     case Create.run(params) do
-      {:ok, raffle} ->
+      {:ok, user} ->
         conn
         |> put_status(:created)
-        |> render("created.json", %{raffle: raffle})
-
-      # {:error,
-      #  %Ecto.Changeset{
-      #    errors: [
-      #      email:
-      #        {"has already been taken", [constraint: :unique, constraint_name: "users_email_index"]}
-      #    ]
-      #  }} ->
-      #   ErrorHandler.conflict(conn)
+        |> render("created.json", %{user: user})
 
       {:error, %Ecto.Changeset{}} ->
         ErrorHandler.bad_request(conn)
