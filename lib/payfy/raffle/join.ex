@@ -10,7 +10,7 @@ defmodule Payfy.Raffle.Join do
     # deve-se considerar que pessoas famosas porem criar sorteios muito populares aonde teriam muitos usuários se cadastrando ao mesmo tempo e participando do sistema. O sistema não pode cair nesses casos, ou falhar em respeitar as regras acima.
     %{"raffle_id" => raffle_id} = params
 
-    {:ok, raffle_map} = Get.run(raffle_id)
+    {:ok, raffle_map} = Get.run(%{"raffle_id" => raffle_id})
 
     if Date.diff(raffle_map.limit_date, Date.utc_today()) do
       JoinRaffle.new(params)

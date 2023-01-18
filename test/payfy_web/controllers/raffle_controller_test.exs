@@ -59,7 +59,7 @@ defmodule PayfyWeb.RaffleControllerTest do
         "raffle_id" => raffle_id
       })
 
-      assert conn.resp_body == ""
+      assert conn.resp_body == "{\"message\":\"not found\"}"
     end
   end
 

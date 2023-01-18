@@ -7,7 +7,6 @@ defmodule PayfyWeb.RaffleController do
   # alias PayfyWeb.Helpers.ErrorHandler
 
   def get(conn, params) do
-    IO.inspect(params)
     # validar se a data ja passou, se nao passou dar erro
     case Get.run(params) do
       {:ok, raffle} ->
@@ -21,7 +20,6 @@ defmodule PayfyWeb.RaffleController do
   end
 
   def create(conn, params) do
-    IO.inspect("caralho")
     params
     |> Create.run()
     |> case do
@@ -37,9 +35,6 @@ defmodule PayfyWeb.RaffleController do
     # check if raffle pass the date
     # check if user exists\
     Join.run(params)
-    # JoinRaffle.new(params)
-    # |> Oban.insert!()
-
     send_resp(conn, 200, "{\"message\": \"you join the raffle\"}")
   end
 end
