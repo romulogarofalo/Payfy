@@ -27,8 +27,7 @@ defmodule PayfyWeb.RaffleControllerTest do
       })
 
       %{"id" => user_id}= conn.resp_body |> Jason.decode!()
-# usar a string de id de retorno para dar join
-# fazer checks da criacao do user
+
       conn =
         post(conn, Routes.raffle_path(conn, :create), %{
           "name" => "carro",
@@ -52,7 +51,7 @@ defmodule PayfyWeb.RaffleControllerTest do
   end
 
   describe "get raffle" do
-    test "should return a ruffle with ok 200", %{conn: conn} do
+    test "should not find raffle, return 404", %{conn: conn} do
       raffle_id = Ecto.UUID.generate()
 
       conn = get(conn, Routes.raffle_path(conn, :get), %{
@@ -60,7 +59,30 @@ defmodule PayfyWeb.RaffleControllerTest do
       })
 
       assert conn.resp_body == "{\"message\":\"not found\"}"
+      assert conn.status == 404
+    end
+
+    test "should return a ruffle but not in the date, will return 400", %{conn: conn} do
+
+      conn =
+        post(conn, Routes.raffle_path(conn, :create), %{
+          "name" => "carro",
+          "limit_date" => "2023-04-01"
+        })
+
+      assert conn.status == 200
+      [%{id: id_join_raffle}] = Payfy.Repo.all(Payfy.Raffle)
+
+      assert conn.resp_body == "{\"raffle_id\": \"#{id_join_raffle}\"}"
+
+      %{"raffle_id" => raffle_id} = conn.resp_body |> Jason.decode!()
+
+      conn = get(conn, Routes.raffle_path(conn, :get), %{
+        "raffle_id" => raffle_id
+      })
+
+      assert conn.resp_body == "{\"message\":\"can't show before the limit date\"}"
+      assert conn.status == 400
     end
   end
-
 end
