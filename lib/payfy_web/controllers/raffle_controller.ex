@@ -7,8 +7,8 @@ defmodule PayfyWeb.RaffleController do
   # alias PayfyWeb.Helpers.ErrorHandler
 
   def get(conn, params) do
-    # validar se a data ja passou, se nao passou dar erro
-    case Get.run(params) do
+    Get.run_after_limit_date(params)
+    |> case do
       {:ok, raffle} ->
         conn
         |> put_status(:ok)
@@ -16,6 +16,8 @@ defmodule PayfyWeb.RaffleController do
 
       {:error, :not_found} ->
         send_resp(conn, 404, "{\"message\":\"not found\"}")
+      {:error, :invalid_date} ->
+        send_resp(conn, 400, "{\"message\":\"can't show before the limit date\"}")
     end
   end
 
@@ -32,8 +34,6 @@ defmodule PayfyWeb.RaffleController do
   end
 
   def join(conn, params) do
-    # check if raffle pass the date
-    # check if user exists\
     Join.run(params)
     send_resp(conn, 200, "{\"message\": \"you join the raffle\"}")
   end
