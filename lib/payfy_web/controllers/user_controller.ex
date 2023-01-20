@@ -2,7 +2,6 @@ defmodule PayfyWeb.UserController do
   use PayfyWeb, :controller
 
   alias Payfy.User.Create
-  alias PayfyWeb.Helpers.ErrorHandler
 
   def create(conn, params) do
     case Create.run(params) do
@@ -12,10 +11,10 @@ defmodule PayfyWeb.UserController do
         |> render("created.json", %{user: user})
 
       {:error, %Ecto.Changeset{}} ->
-        ErrorHandler.bad_request(conn)
+        send_resp(conn, 404, "{\"message\":\"not found\"}")
 
       {:error, _} ->
-        ErrorHandler.internal_server_error(conn)
+        send_resp(conn, 404, "{\"message\":\"not found\"}")
     end
   end
 end
