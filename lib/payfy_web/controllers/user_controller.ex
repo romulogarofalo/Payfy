@@ -11,7 +11,7 @@ defmodule PayfyWeb.UserController do
         |> render("created.json", %{user: user})
 
       {:error, %Ecto.Changeset{}} ->
-        send_resp(conn, 404, "{\"message\":\"not found\"}")
+        send_resp(conn, 400, "{\"message\":\"name or email wrong format\"}")
 
       {:error, _} ->
         send_resp(conn, 404, "{\"message\":\"not found\"}")
