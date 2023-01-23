@@ -45,8 +45,6 @@ defmodule PayfyWeb.RaffleControllerTest do
           "user_id" => user_id,
           "raffle_id" => raffle_id
         })
-
-        # fazer ultimas checagens
     end
   end
 
